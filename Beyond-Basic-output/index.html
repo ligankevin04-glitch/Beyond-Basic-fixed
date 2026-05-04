@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Beyond Basic — All the best for a whole lot less</title>
+    <meta name="description" content="Curated bags, gadgets, fashion, shoes, perfumes & accessories at unbeatable prices. Free shipping over $50, 30-day returns." />
+    <!--
+      GitHub Pages SPA routing: 404.html redirects unknown paths here as ?p=/the/path
+      This script restores the real URL before React Router initialises.
+    -->
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var p = params.get('p');
+        if (p) {
+          var q = params.get('q');
+          var restored = p.replace(/~and~/g, '&') + (q ? '?' + q.replace(/~and~/g, '&') : '');
+          window.history.replaceState(null, '', restored || '/');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./src/main.tsx"></script>
+  </body>
+</html>

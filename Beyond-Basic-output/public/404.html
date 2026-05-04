@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Beyond Basic</title>
+    <!--
+      GitHub Pages SPA routing fix.
+      
+      GitHub Pages serves this 404.html for any path that doesn't exist as a real file.
+      We encode the intended URL into a ?p= query param and redirect to index.html,
+      which reads it back and calls history.replaceState before React Router boots.
+
+      Works for BOTH:
+        - Custom domain / root:  https://yourdomain.com/shop/gadgets
+        - Repo subpath:          https://username.github.io/repo-name/shop/gadgets
+    -->
+    <script>
+      (function () {
+        var l = window.location;
+        var origin = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '');
+
+        // Detect if we're on a GitHub Pages repo subpath (e.g. /repo-name/)
+        // A repo subpath has exactly 1 leading path segment before the SPA routes.
+        // We detect it by checking if the first path segment looks like a repo name
+        // (non-empty, no dots suggesting a file extension).
+        var pathParts = l.pathname.split('/').filter(Boolean);
+
+        var base = '';
+        var appPath = l.pathname;
+
+        // If hostname is github.io and there's at least one path segment, treat
+        // the first segment as the repo base (e.g. /repo-name).
+        if (l.hostname.endsWith('github.io') && pathParts.length >= 1) {
+          base = '/' + pathParts[0];
+          appPath = '/' + pathParts.slice(1).join('/');
+        }
+
+        // Encode the app path we want to restore, replacing & to avoid breaking query strings
+        var encoded = appPath.replace(/&/g, '~and~');
+        var qs = l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '';
+
+        l.replace(origin + base + '/?p=' + encoded + qs + l.hash);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
